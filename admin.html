@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Admin - Gestion Contenus</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background: #f7f9fc;
+    color: #222;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c3e50;
+  }
+  section {
+    background: white;
+    padding: 15px;
+    margin-bottom: 25px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  h2 {
+    border-bottom: 2px solid #34495e;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    color: #34495e;
+  }
+  label {
+    display: block;
+    margin: 10px 0 5px;
+  }
+  input[type=text], textarea {
+    width: 100%;
+    padding: 8px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+  button {
+    background: #34495e;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #2c3e50;
+  }
+  .list-item {
+    background: #ecf0f1;
+    margin: 8px 0;
+    padding: 8px 12px;
+    border-radius: 4px;
+ display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .list-item button {
+    background: #e74c3c;
+    padding: 5px 10px;
+  }
+  .list-item button:hover {
+    background: #c0392b;
+  }
+</style>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+<h1>Admin - Gestion Contenus</h1>
+
+<section id="actualites-section">
+  <h2>Actualités</h2>
+  <form id="actualite-form">
+    <label for="actualite-titre">Titre</label>
+    <input type="text" id="actualite-titre" required />
+    <label for="actualite-contenu">Contenu</label>
+    <textarea id="actualite-contenu" rows="3" required></textarea>
+    <button type="submit">Ajouter Actualité</button>
+  </form>
+  <div id="actualites-list"></div>
+</section>
+
+<section id="formations-section">
+  <h2>Formations</h2>
+  <form id="formation-form">
+    <label for="formation-nom">Nom du programme</label>
+    <input type="text" id="formation-nom" required />
+    <label for="formation-duree">Durée / Cursus</label>
+    <input type="text" id="formation-duree" required />
+    <button type="submit">Ajouter Formation</button>
+  </form>
+  <div id="formations-list"></div>
+</section>
+<section id="resultats-section">
+  <h2>Résultats Globaux</h2>
+  <form id="resultat-form">
+    <label for="resultat-classe">Classe</label>
+    <input type="text" id="resultat-classe" required />
+    <label for="resultat-description">Description / Résultats</label>
+    <textarea id="resultat-description" rows="3" required></textarea>
+    <button type="submit">Ajouter Résultat</button>
+  </form>
+  <div id="resultats-list"></div>
+</section>
+
+<script>
+  // Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyA-nuTy8K1NPE1qzKdsIEe5O-xGaGuBeUo",
+    authDomain: "stark-base-937cb.firebaseapp.com",
+    projectId: "stark-base-937cb",
+    storageBucket: "stark-base-937cb.firebasestorage.app",
+    messagingSenderId: "821733286374",
+    appId: "1:821733286374:web:ab315d4ef3b0adfdea3627"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // Fonction générique pour supprimer un doc
+  function supprimerDoc(collection, id) {
+    db.collection(collection).doc(id).delete();
+  }
+
+  // --- ACTUALITES ---
+  const actualiteForm = document.getElementById('actualite-form');
+  const actualitesList = document.getElementById('actualites-list');
+
+  actualiteForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const titre = document.getElementById('actualite-titre').value.trim();
+const formation = doc.data();
+      const div = document.createElement('div');
+      div.className = 'list-item';
+      div.innerHTML = `
+        <strong>formation.nom -{formation.duree}</strong>
+        <button onclick="supprimerDoc('formations', 'doc.id')">Supprimer</button>
+      `;
+      formationsList.appendChild(div);
+    );
+  );
+
+  // — RESULTATS —
+  const resultatForm = document.getElementById('resultat-form');
+  const resultatsList = document.getElementById('resultats-list');
+
+  resultatForm.addEventListener('submit', e => 
+    e.preventDefault();
+    const classe = document.getElementById('resultat-classe').value.trim();
+    const description = document.getElementById('resultat-description').value.trim();
+
+    db.collection('resultats').add( titre, contenu )
+      .then(() => 
+        resultatForm.reset();
+      );
+  );
+
+  db.collection('resultats').onSnapshot(snapshot => 
+    resultatsList.innerHTML = ”;
+    snapshot.forEach(doc => 
+      const resultat = doc.data();
+      const div = document.createElement('div');
+      div.className = 'list-item';
+      div.innerHTML = `
+        <strong>{resultat.classe}</strong> : resultat.description
+        <button onclick="supprimerDoc('resultats', '{doc.id}')">Supprimer</button>
+      `;
+ const contenu = document.getElementById('actualite-contenu').value.trim();
+
+    db.collection('actualites').add({ titre, contenu })
+      .then(() => {
+        actualiteForm.reset();
+      });
+  });
+
+  db.collection('actualites').onSnapshot(snapshot => {
+    actualitesList.innerHTML = '';
+    snapshot.forEach(doc => {
+      const actualite = doc.data();
+      const div = document.createElement('div');
+      div.className = 'list-item';
+      div.innerHTML = `
+        <strong>actualite.titre</strong>
+        <button onclick="supprimerDoc('actualites', '{doc.id}')">Supprimer</button>
+      `;
+      actualitesList.appendChild(div);
+    });
+  });
+    //suppression 
+
+
+  // --- FORMATIONS ---
+  const formationForm = document.getElementById('formation-form');
+  const formationsList = document.getElementById('formations-list');
+
+  formationForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const nom = document.getElementById('formation-nom').value.trim();
+    const duree = document.getElementById('formation-duree').value.trim();
+
+    db.collection('formations').add({ nom, duree })
+      .then(() => {
+        formationForm.reset();
+      });
+  });
+
+  db.collection('formations').onSnapshot(snapshot => {
+    formationsList.innerHTML = '';
+    snapshot.forEach(doc => {
+        resultatsList.appendChild(div);
+    });
+  });
+  //suppression 
+</script>
+
+</body>
+</html>
+
