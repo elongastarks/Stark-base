@@ -196,68 +196,62 @@
   const db = firebase.firestore();
 
   // Charger formations dynamiques
-  function loadFormations() {
-    const list = document.getElementById('formations-list');
-    list.innerHTML = '';
-    db.collection('formations').get().then(snapshot => {
-      snapshot.forEach(doc => {
-          const f = doc.data();
-        const li = document.createElement('li');
-        li.textContent = `f.nom -{f.duree}`;
-        list.appendChild(li);
-      });
+  function loadFormations() 
+  const list = document.getElementById('formations-list');
+  list.innerHTML = ”;
+  db.collection('formations').get().then(snapshot => 
+    snapshot.forEach(doc => 
+      const f = doc.data();
+      const li = document.createElement('li');
+      li.textContent = `{f.nom} - ${f.duree}`;
+      list.appendChild(li);
     });
-  }
+  });
+}
 
   // Charger actualités dynamiques
   function loadActualites() {
-    const list = document.getElementById('actualites-list');
-    list.innerHTML = '';
-    db.collection('actualites').orderBy('date', 'desc').get().then(snapshot => {
-      snapshot.forEach(doc => {
-        const a = doc.data();
-        const li = document.createElement('li');
-        li.textContent = `a.titre ({new Date(a.date.seconds * 1000).toLocaleDateString()})`;
-        list.appendChild(li);
-      });
+  const list = document.getElementById('actualites-list');
+  list.innerHTML = ''; // Vide la liste avant d'ajouter
+
+  db.collection('actualites').get().then(snapshot => {
+    snapshot.forEach(doc => {
+      const a = doc.data();
+      const li = document.createElement('li');
+      li.innerHTML = `<strong>a.titre</strong><br>{a.contenu}`;
+      list.appendChild(li);
     });
-  }
+  }).catch(error => {
+    console.error("Erreur lors du chargement des actualités :", error);
+  });
+}
 
   // Charger résultats dynamiques
-  function loadResultats() {
-    const list = document.getElementById('resultats-list');
-    list.innerHTML = '';
-    db.collection('resultats').get().then(snapshot => {
-      snapshot.forEach(doc => {
-        const r = doc.data();
-        const li = document.createElement('li');
-        li.textContent = `r.classe :{r.resultat}`;
-        list.appendChild(li);
-      });
-    });
-  }
-  
-   // Charger formation dynamiques
-  function loadResultats() {
-    const list = document.getElementById('formations-list');
-    list.innerHTML = '';
-    db.collection('formations').get().then(snapshot => {
-      snapshot.forEach(doc => {
-        const r = doc.data();
-        const li = document.createElement('li');
-        li.textContent = `r.classe :{r.resultat}`;
-        list.appendChild(li);
-      });
-    });
-  }
+  const resultatsList = document.getElementById('resultats-list');
 
+db.collection('resultats').onSnapshot(snapshot => {
+  resultatsList.innerHTML = '';
+  snapshot.forEach(doc => {
+    const resultat = doc.data();
+    const div = document.createElement('div');
+    div.className = 'list-item';
+    div.innerHTML = `
+      <strong>resultat.titre</strong><br>
+      <p>{resultat.contenu}</p>
+      <button onclick="supprimerDoc('resultats', '${doc.id}')">Supprimer</button>
+    `;
+    resultatsList.appendChild(div);
+  });
+});
+   
+    // Appelle la fonction pour charger les actualités au chargement de la page
   // Charger tout au démarrage
   window.onload = () => {
     loadFormations();
     loadActualites();
-    loadResultats();
   };
 </script>
 </body>
 </html>
 
+  
