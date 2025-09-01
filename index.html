@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>École - Accueil</title>
+<style>
+  /* Reset et base */
+  body {
+    margin: 0; font-family: Arial, sans-serif;
+    background: #f5f6fa; color: #333;
+  }
+  a { color: #0a66c2; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  /* Conteneur principal */
+  .container {
+    max-width: 960px; margin: auto; padding: 10px;
+  }
+  header, footer {
+    background-color: #20354a; color: white;
+    padding: 10px 20px;
+    display: flex; justify-content: space-between;
+    align-items: center;
+  }
+  header h1 {
+    margin: 0; font-size: 1.3rem;
+  }
+  nav a {
+    color: white; margin-left: 15px; font-weight: bold;
+  }
+  nav a:hover {
+    text-decoration: underline;
+  }
+ /* Banniere principale */
+  .banner {
+    background-color: #34495e;
+    color: white;
+    padding: 20px;
+    margin-top: 10px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .banner-text {
+    max-width: 75%;
+  }
+  .banner h2 {
+    margin-top: 0;
+  }
+  .banner button {
+    padding: 10px 20px;
+    background-color: #0a66c2;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+    font-weight: bold;
+  }
+  .banner button:hover {
+    background-color: #084d8a;
+  }
+  /* Sections 2 colonnes */
+  .two-cols {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+  }
+  .two-cols > div {
+    background: white;
+    padding: 15px;
+    border-radius: 4px;
+    flex: 1 1 45%;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  }
+  .section-title {
+    background-color: #20354a;
+    color: white;
+    padding: 8px 12px;
+    font-weight: bold;
+    border-radius: 4px 4px 0 0;
+    margin: -15px -15px 10px -15px;
+  }
+  /* Sections simple */
+  .full-section {
+    background: white;
+    margin-top: 15px;
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    padding: 15px;
+  }
+  /* Footer */
+  footer {
+    margin-top: 20px;
+    justify-content: center;
+  }
+  /* Responsive */
+
+ @media (max-width: 600px) {
+    .two-cols {
+      flex-direction: column;
+    }
+    .two-cols > div {
+      flex: 1 1 100%;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>Logo / Nom de l'école</div>
+  <nav>
+    <a href="#apropos">À propos</a>
+    <a href="#formations">Formations</a>
+    <a href="#actualites">Actualités</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<div class="container">
+
+  <section class="banner">
+    <div class="banner-text">
+      <h2>Bannière principale</h2>
+      <p>Grande image - Slogan / message clé</p>
+    </div>
+    <button>Bouton</button>
+  </section>
+
+  <section class="two-cols" id="apropos">
+    <div>
+      <div class="section-title">À propos</div>
+      <p>Texte d'introduction...</p>
+    </div>
+    <div id="formations">
+      <div class="section-title">Formations</div>
+      <ul id="formations-list">
+        <!-- Formations dynamiques -->
+      </ul>
+      <button onclick="alert('Voir plus de formations')">Bouton</button>
+    </div>
+  </section>
+
+  <section class="full-section" id="actualites">
+    <div class="section-title">Actualités / Événements</div>
+    <ul id="actualites-list">
+      <!-- Actualités dynamiques -->
+    </ul>
+  </section>
+
+  <section class="two-cols">
+    <div>
+      <div class="section-title">Témoignages</div>
+ 
+ <p>Retours d’étudiants...</p>
+    </div>
+    <div>
+      <div class="section-title">Résultats globaux</div>
+      <ul id="resultats-list">
+        <!-- Résultats dynamiques -->
+      </ul>
+    </div>
+  </section>
+
+  <section class="full-section" id="contact">
+    <div class="section-title">Contact</div>
+    <p>Formulaire</p>
+    <p>Adresse</p>
+    <p>Email / Téléphone</p>
+    <p>Carte</p>
+  </section>
+
+</div>
+
+<footer>
+  <p>Pied de page - © 2025 École</p>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script>
+  // TODO:  config Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyA-nuTy8K1NPE1qzKdsIEe5O-xGaGuBeUo",
+    authDomain: "stark-base-937cb.firebaseapp.com",
+    projectId: "stark-base-937cb",
+    storageBucket: "stark-base-937cb.firebasestorage.app",
+    messagingSenderId: "821733286374",
+    appId: "1:821733286374:web:ab315d4ef3b0adfdea3627"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // Charger formations dynamiques
+  function loadFormations() {
+    const list = document.getElementById('formations-list');
+    list.innerHTML = '';
+    db.collection('formations').get().then(snapshot => {
+      snapshot.forEach(doc => {
+          const f = doc.data();
+        const li = document.createElement('li');
+        li.textContent = `f.nom -{f.duree}`;
+        list.appendChild(li);
+      });
+    });
+  }
+
+  // Charger actualités dynamiques
+  function loadActualites() {
+    const list = document.getElementById('actualites-list');
+    list.innerHTML = '';
+    db.collection('actualites').orderBy('date', 'desc').get().then(snapshot => {
+      snapshot.forEach(doc => {
+        const a = doc.data();
+        const li = document.createElement('li');
+        li.textContent = `a.titre ({new Date(a.date.seconds * 1000).toLocaleDateString()})`;
+        list.appendChild(li);
+      });
+    });
+  }
+
+  // Charger résultats dynamiques
+  function loadResultats() {
+    const list = document.getElementById('resultats-list');
+    list.innerHTML = '';
+    db.collection('resultats').get().then(snapshot => {
+      snapshot.forEach(doc => {
+        const r = doc.data();
+        const li = document.createElement('li');
+        li.textContent = `r.classe :{r.resultat}`;
+        list.appendChild(li);
+      });
+    });
+  }
+  
+   // Charger formation dynamiques
+  function loadResultats() {
+    const list = document.getElementById('formations-list');
+    list.innerHTML = '';
+    db.collection('formations').get().then(snapshot => {
+      snapshot.forEach(doc => {
+        const r = doc.data();
+        const li = document.createElement('li');
+        li.textContent = `r.classe :{r.resultat}`;
+        list.appendChild(li);
+      });
+    });
+  }
+
+  // Charger tout au démarrage
+  window.onload = () => {
+    loadFormations();
+    loadActualites();
+    loadResultats();
+  };
+</script>
+</body>
+</html>
+
