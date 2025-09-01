@@ -132,21 +132,33 @@
 
   // --- ACTUALITES ---
   const actualiteForm = document.getElementById('actualite-form');
-  const actualitesList = document.getElementById('actualites-list');
+const actualitesList = document.getElementById('actualites-list');
 
-  actualiteForm.addEventListener('submit', e => {
-    e.preventDefault();
-    const titre = document.getElementById('actualite-titre').value.trim();
-const formation = doc.data();
-      const div = document.createElement('div');
-      div.className = 'list-item';
-      div.innerHTML = `
-        <strong>formation.nom -{formation.duree}</strong>
-        <button onclick="supprimerDoc('formations', 'doc.id')">Supprimer</button>
-      `;
-      formationsList.appendChild(div);
-    );
-  );
+actualiteForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const titre = document.getElementById('actualite-titre').value.trim();
+  const contenu = document.getElementById('actualite-contenu').value.trim();
+
+  db.collection('actualites').add({ titre, contenu })
+    .then(() => {
+      actualiteForm.reset();
+    });
+});
+
+db.collection('actualites').onSnapshot(snapshot => {
+  actualitesList.innerHTML = '';
+  snapshot.forEach(doc => {
+    const actualite = doc.data();
+    const div = document.createElement('div');
+    div.className = 'list-item';
+    div.innerHTML = `
+      <strong>actualite.titre</strong><br>
+      <p>{actualite.contenu}</p>
+      <button onclick="supprimerDoc('actualites', '${doc.id}')">Supprimer</button>
+    `;
+    actualitesList.appendChild(div);
+  });
+});
 
   // — RESULTATS —
   const resultatForm = document.getElementById('resultat-form');
@@ -194,7 +206,6 @@ const formation = doc.data();
       actualitesList.appendChild(div);
     });
   });
-    //suppression 
 
 
   // --- FORMATIONS ---
@@ -212,13 +223,30 @@ const formation = doc.data();
       });
   });
 
-  db.collection('formations').onSnapshot(snapshot => {
-    formationsList.innerHTML = '';
-    snapshot.forEach(doc => {
-        resultatsList.appendChild(div);
-    });
+  db.collection('formations').onSnapshot(snapshot => 
+  formationsList.innerHTML = ”;
+  snapshot.forEach(doc => 
+    const formation = doc.data();
+    const div = document.createElement('div');
+    div.className = 'list-item';
+    div.innerHTML = `
+      <strong>{formation.nom}</strong> - formation.duree
+      <button onclick="supprimerDoc('formations', '{doc.id}')">Supprimer</button>
+    `;
+    formationsList.appendChild(div);
   });
-  //suppression 
+});
+  
+  //suppression
+  function supprimerDoc(collection, docId) {
+  db.collection(collection).doc(docId).delete()
+    .then(() => {
+      console.log(`Document supprimé de collection`);
+    )
+    .catch(error => 
+      console.error("Erreur de suppression :", error);
+    );
+  
 </script>
 
 </body>
