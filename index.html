@@ -226,6 +226,12 @@
   });
 }
 
+  db.collection('resultats').get().then(snapshot => {
+  const testDiv = document.createElement('div');
+  testDiv.textContent = `Documents trouvés : ${snapshot.size}`;
+  document.body.appendChild(testDiv);
+});
+  
   // Charger résultats dynamiques
   const resultatsList = document.getElementById('resultats-list');
 
