@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Lecture Firestore</title>
+</head>
+<body>
+  <h1>Données Firestore - Collection "test"</h1>
+  <ul id="data-list"></ul>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDDpdoSRA5LWpIYmx6nxj8ew1VvYe4fyTQ",
+      authDomain: "stark-test-4aabc.firebaseapp.com",
+      projectId: "stark-test-4aabc",
+      storageBucket: "stark-test-4aabc.firebasestorage.app",
+      messagingSenderId: "404765089226",
+      appId: "1:404765089226:web:b27d736e7e4d9076e84333",
+      measurementId: "G-1315XMHHQL"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function lireCollection() {
+      const querySnapshot = await getDocs(collection(db, "test"));
+
+const list = document.getElementById("data-list");
+      list.innerHTML = ""; // vide avant d'ajouter
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const li = document.createElement("li");
+        li.textContent = `Titre: ${data.titre}, Nom:${data.nom}, Age: ${data.age}`;
+        list.appendChild(li);
+      });
+    }
+
+    lireCollection();
+  </script>
+</body>
+</html>

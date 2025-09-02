@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Firestore onSnapshot Exemple</title>
+</head>
+<body>
+  <h2>Données Firestore - Collection "test"</h2>
+  <ul id="liste"></ul>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+    apiKey: "AIzaSyDDpdoSRA5LWpIYmx6nxj8ew1VvYe4fyTQ",
+    authDomain: "stark-test-4aabc.firebaseapp.com",
+    projectId: "stark-test-4aabc",
+    storageBucket: "stark-test-4aabc.firebasestorage.app",
+    messagingSenderId: "404765089226",
+    appId: "1:404765089226:web:b27d736e7e4d9076e84333",
+    measurementId: "G-1315XMHHQL"
+  };
+
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const liste = document.getElementById("liste");
+    const testCollection = collection(db, "test");
+
+    onSnapshot(testCollection, (snapshot) => {
+      liste.innerHTML = ""; // vide la liste à chaque update
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const li = document.createElement("li");
+
+li.textContent = `Titre:  ${data.titre}, Nom: ${data.nom}, Age: ${data.age}`;
+        liste.appendChild(li);
+      });
+    });
+  </script>
+</body>
+</html>
